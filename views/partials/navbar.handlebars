@@ -1,0 +1,32 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="pull-left" href="/"><img src="/img/Logo.png" height="50" width="120"></a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/home">Search Plans</a></li>
+        {{#if user}}
+          <li><a href="/plans_page">Your trips</a></li>
+        {{/if}}
+        <li><a href="/help">Help/FAQ</a></li>
+        <li class="hidden-lg" data-toggle="modal" data-target="#contactModal"><a>Contact</a></li>
+        <li class="hidden-lg" data-toggle="modal" data-target="#aboutModal"><a>About</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {{#if user}}
+          <li><a>Welcome, {{username}} !!</a></li>
+          <li><a href="/profile_page">Profile</a></li>
+          <li><a href="/logout_page">Logout</a></li>
+        {{else}}
+          <li><a href="/">Login</a></li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</nav>

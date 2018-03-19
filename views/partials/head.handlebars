@@ -1,0 +1,61 @@
+<meta charset="UTF-8">
+<!-- If IE use the latest rendering engine -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Set the page to the width of the device and set the zoom level -->
+<meta name="viewport" content="width = device-width, initial-scale = 1">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.css"/>
+<script>
+  if (location.protocol != 'https:'){
+    // disable on localhost
+    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+  }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAhftsNX43-RM-L4GBYbjxjUWnOVNKPuFY"></script>
+<script src="https://cdn.datatables.net/v/bs/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115325063-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-115325063-1');
+</script>
+
+<style>
+  input.error {
+    border: 1px dotted red;
+  }
+  label.error {
+    color: red;
+    font-style: italic;
+    padding-top: 2px;
+  }
+  .bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #1b809e;
+    border-left-width: 8px;
+    border-radius: 3px;
+  }
+  .bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+  .bs-callout p:last-child {
+    margin-bottom: 0;
+  }
+  .bs-callout code {
+    border-radius: 3px;
+  }
+
+  /* Tighten up space between multiple callouts */
+  .bs-callout + .bs-callout {
+    margin-top: -5px;
+  }
+</style>

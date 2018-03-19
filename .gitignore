@@ -1,0 +1,9 @@
+node_modules/*
+.DS_Store
+se.pem
+mailjet_init.sh
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

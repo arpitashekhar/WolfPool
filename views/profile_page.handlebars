@@ -1,0 +1,135 @@
+<div class="page-header">
+  <h3>Profile Page</h3>
+</div>
+
+<div class="row">
+  <div class="profilePage">
+    <form id="profile_form_id" class="formProfilePages" role="form" name="profile_form" action="/profile_page" method="POST">
+      {{#each items}}
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" value= {{this.name}} name="name">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value= {{this.email}} placeholder="abc@xyz.edu" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" data-country="US" id="phone" name="phone" placeholder="XXX-XXX-XXXX" pattern="^\d{3}-\d{3}-\d{4}$" value= {{this.phone}}>
+          </div>
+
+          <div class="form-group">
+            <label for="university">University</label>
+            <select class="form-control" id="university" name="university">
+            <option></option>
+            <option value="North Carolina State University">North Carolina State University</option>
+            <option value="University of North Carolina at Chapel Hill">University of North Carolina at Chapel Hill</option>
+            <option value="Duke University">Duke University</option>
+            <option value="Wake Forst University">Wake Forst University</option>
+            <option value="East Carolina University">East Carolina University</option>
+          </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fieldAddress">Address</label>
+            <textarea class="form-control" rows="5" id="fieldAddress" name="address">{{this.address}}</textarea>
+          </div>
+
+        </div>
+
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="fieldGender">Gender</label>
+            <div class="radio">
+              <label><input type="radio" name="optradio" value="Male">Male</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="optradio" value="Female">Female</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="optradio" value="Prefer not to answer">Prefer not to answer</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">To make changes to Profile please enter the current password else Enter New Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
+
+          <div class="form-group">
+            <label for="cnfpassword">Confirm Password</label>
+            <input type="password" class="form-control" id="cnfpassword" name="cnfpassword">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <a href="/"><button type="button" class="btn btn-danger">Cancel</button></a>
+          </div>
+
+        </div>
+      {{/each}}
+    </form>
+  </div>
+</div>
+<script>
+  $().ready(function() {
+    $("#profile_form_id").validate({
+      rules: {
+        name: {
+          required: true
+        },
+        email: {
+          required: true,
+          educheck: true
+        },
+        phone: {
+          required: true
+        },
+        university: {
+          required: true
+        },
+        password: {
+          minlength: 6,
+          pwcheck: true
+        },
+        cnfpassword: {
+          equalTo: "#password"
+        }
+      },
+      messages: {
+        name: {
+          required: "Please enter your Name"
+        },
+        email: {
+          required: "Please enter your Email Address",
+          educheck: "Please enter email with .edu domain"
+        },
+        phone: {
+          required: "Please enter your Phone Number"
+        },
+        university: {
+          required: "Please select your University"
+        },
+        password: {
+          minlength: "Password should be atleast 6 character long",
+          pwcheck: "Password should contain atleast one special character,one digit and one character"
+        },
+        cnfpassword: {
+          equalTo: "Both the password should be same"
+        }
+      }
+    });
+    $.validator.addMethod("pwcheck", function(value) {
+      return /[a-zA-Z]/.test(value) &&
+        /\d/.test(value) &&
+        /[=!\-@._*#`$%^&;:?]/.test(value)
+    });
+    $.validator.addMethod("educheck", function(value) {
+      return /^.+.edu/.test(value)
+    });
+  });
+</script>
