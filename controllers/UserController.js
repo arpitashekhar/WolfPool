@@ -1,3 +1,12 @@
+var nodemailer=require("nodemailer");
+var smtpTransport=nodemailer.createTransport({
+	service: "gmail",
+	auth:{
+		user: process.env.mailUser,
+		pass: process.env.mailPass
+	}
+});
+
 var schedule = require('node-schedule');
 exports.createUser = function(req, res){
 
@@ -31,28 +40,15 @@ exports.createUser = function(req, res){
           var websitehost = 'http://localhost:3000';
           //var websitehost = 'https://wpool-dev.us-east-1.elasticbeanstalk.com';
 
-          // Configure the api
-          var mailjet = require('node-mailjet').connect(process.env.MJ_PUBLIC_KEY, process.env.MJ_PRIVATE_KEY)
-
-          var request = mailjet
-              .post("send")
-              .request({
-                  "FromEmail":"sengncsu2018@gmail.com",
-                  "FromName":"Wolfpool Support",
-                  "Subject":'Wolfpool user verification',
-                  "Html-part":'<h3>Please click on the <a href="' + websitehost + '/verify_user/' + req.body.email + '/' + verfhash + '">link</a> to verify your account</h3>The link will expire in 24 hours',
-                  "Recipients":[
-                    {
-                            "Email": req.body.email
-                    }
-                  ]
-              });
-
-          request
-          .then((result) => {
-              return res.render('info_page',{data:'An email has been sent to you with verification link. Please check your spam too.'});
-          })
-          .catch((err) => {
+          // Send Email
+          mailOptions={
+            to: req.body.email,
+            subject: "Wolfpool user verification",
+            html: '<h3>Please click on the <a href="' + websitehost + '/verify_user/' + req.body.email + '/' + verfhash + '">link</a> to verify your account</h3>The link will expire in 24 hours'
+          }
+          smtpTransport.sendMail(mailOptions,(error,response)=>{
+            if(error){
+              console.log(error);
               console.log("**********in email error "+user._id);
               User.remove({"_id":user._id},function(err){
                   if(err){
@@ -63,8 +59,11 @@ exports.createUser = function(req, res){
                     return res.render('info_page',{data: 'There was an unexpected error in registraion. Please click here to Register again ', name:'Register', link:'register_page'});
                   }
               });
-              console.log(err.statusCode)
-          })
+              console.log(error.statusCode) 
+            }else{
+              return res.render('info_page',{data:'An email has been sent to you with verification link. Please check your spam too.'});
+            }
+          });
         }
       });
 
