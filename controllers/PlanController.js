@@ -1,6 +1,13 @@
 var geolib = require('geolib');
 var haversine = require('haversine-distance');
 var Plan = require('../models/plan');
+var smtpTransport=nodemailer.createTransport({
+	service: "gmail",
+	auth:{
+		user: process.env.mailUser,
+		pass: process.env.mailPass
+	}
+});
 
 var checker = 0;
 
@@ -75,28 +82,22 @@ exports.joinPlan = function(request, response) {
         emails_for_mail += " " + email
       });
       console.log(emails);
-      // Configure the api
-      var mailjet = require('node-mailjet').connect(process.env.MJ_PUBLIC_KEY, process.env.MJ_PRIVATE_KEY)
-
-      var mj_req = mailjet
-        .post("send")
-        .request({
-          "FromEmail": "sengncsu2018@gmail.com",
-          "FromName": "Wolfpool Support",
-          "Subject": 'Someone just joined your wolfpool plan!',
-          "Html-part": 'Hi there! ' + request.session.userName + ' just joined your trip with details listed below. Following are the email addresses of everyone in the plan: ' + emails_for_mail + '.<br/><br/>Trip details:<br/>Source: ' + plan.source_id + '<br/>Destination: ' + plan.destination_id + '<br/>Date: ' + (plan.date.getMonth() + 1) + '/' + plan.date.getDate() + '/' +  plan.date.getFullYear() + '<br/>Time(24 hr format): ' + plan.time,
-          "Recipients": emails
-        });
-
-      mj_req
-        .then((result) => {
+      
+      // Send Email
+      mailOptions={
+        to: emails,
+        subject: "Someone just joined your wolfpool plan!",
+        html: 'Hi there! ' + request.session.userName + ' just joined your trip with details listed below. Following are the email addresses of everyone in the plan: ' + emails_for_mail + '.<br/><br/>Trip details:<br/>Source: ' + plan.source_id + '<br/>Destination: ' + plan.destination_id + '<br/>Date: ' + (plan.date.getMonth() + 1) + '/' + plan.date.getDate() + '/' +  plan.date.getFullYear() + '<br/>Time(24 hr format): ' + plan.time
+      }
+      smtpTransport.sendMail(mailOptions,(error,response)=>{
+        if(error){
+          console.log(error.statusCode);
+        }else{
           return res.render('info_page', {
-            data: 'An email notification has been to your trip buddies.'
+            data: 'An email notification has been sent to your trip buddies.'
           });
-        })
-        .catch((err) => {
-          console.log(err.statusCode)
-        })
+        }
+      });
 
       response.setHeader('Content-Type', 'application/text');
       response.send("/plans_page");
