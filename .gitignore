@@ -7,3 +7,6 @@ mailjet_init.sh
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+#Package Lock
+package-lock.json

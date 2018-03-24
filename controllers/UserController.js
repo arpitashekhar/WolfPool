@@ -37,7 +37,7 @@ exports.createUser = function(req, res){
         } else {
 
           // For local debugging
-          var websitehost = 'http://localhost:3000';
+          var websitehost = 'http://'+req.get('host');
           //var websitehost = 'https://wpool-dev.us-east-1.elasticbeanstalk.com';
 
           // Send Email
@@ -106,7 +106,6 @@ exports.updateProfile = function(req,res){
 exports.verifyUser = function(req, res){
 
   var User = require('../models/user');
-
   // Check if all parameters are passed
   if (req.params.email && req.params.verfhash){
     User.findOne({email : req.params.email, verification_hash: req.params.verfhash, verified: false})
