@@ -1,3 +1,4 @@
+var nodemailer=require("nodemailer");
 var geolib = require('geolib');
 var haversine = require('haversine-distance');
 var Plan = require('../models/plan');
