@@ -1,7 +1,7 @@
-var nodemailer=require("nodemailer");
 var geolib = require('geolib');
 var haversine = require('haversine-distance');
 var Plan = require('../models/plan');
+var nodemailer=require("nodemailer");
 var smtpTransport=nodemailer.createTransport({
 	service: "gmail",
 	auth:{
@@ -74,25 +74,23 @@ exports.joinPlan = function(request, response) {
       plan.save();
 
       // Send email to users in list that current user joined plan
-      var emails = [];
-      var emails_for_mail = "";
+      var emailList = "";
       plan.emails.forEach(function(email) {
-        emails.push({
-          'Email': email
-        });
-        emails_for_mail += " " + email
+        if(emailList.length == 0)
+          emailList = email;
+        else
+          emailList = emailList + "," + email;
       });
-      console.log(emails);
       
       // Send Email
       mailOptions={
-        to: emails,
+        to: emailList,
         subject: "Someone just joined your wolfpool plan!",
-        html: 'Hi there! ' + request.session.userName + ' just joined your trip with details listed below. Following are the email addresses of everyone in the plan: ' + emails_for_mail + '.<br/><br/>Trip details:<br/>Source: ' + plan.source_id + '<br/>Destination: ' + plan.destination_id + '<br/>Date: ' + (plan.date.getMonth() + 1) + '/' + plan.date.getDate() + '/' +  plan.date.getFullYear() + '<br/>Time(24 hr format): ' + plan.time
+        html: 'Hi there! ' + request.session.userName + ' just joined your trip with details listed below. Following are the email addresses of everyone in the plan: ' + emailList + '.<br/><br/>Trip details:<br/>Source: ' + plan.source_id + '<br/>Destination: ' + plan.destination_id + '<br/>Date: ' + (plan.date.getMonth() + 1) + '/' + plan.date.getDate() + '/' +  plan.date.getFullYear() + '<br/>Time(24 hr format): ' + plan.time
       }
       smtpTransport.sendMail(mailOptions,(error,response)=>{
         if(error){
-          console.log(error.statusCode);
+          console.log(error);
         }else{
           return res.render('info_page', {
             data: 'An email notification has been sent to your trip buddies.'
