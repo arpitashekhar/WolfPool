@@ -14,7 +14,10 @@ var checker = 0;
 
 exports.savePlan = function(request, response) {
   if (checker != 1) {
-    var planModel = require('../models/plan')
+    var planModel = require('../models/plan');
+    var participantModel = require('../models/participant');
+    
+    // Create Participant
     var planData = new planModel({
       source_id: request.body.source,
       destination_id: request.body.destination,
@@ -26,7 +29,10 @@ exports.savePlan = function(request, response) {
       time: request.body.time,
       no_of_people: request.body.no_of_people,
       vacancy: 6 - request.body.no_of_people,
-      emails: [request.session.userEmail]
+      participants: [{
+        email: request.session.userEmail,
+        no_of_people: request.body.no_of_people
+      }]
     });
     planData.save()
       .then(item => {
@@ -53,9 +59,14 @@ exports.savePlan = function(request, response) {
 exports.getPlans = function(request, response) {
 
   Plan.find({
-    "emails": request.session.userEmail
+    'participants.email': request.session.userEmail 
   }, function(err, planslist) {
-    response.send(planslist);
+    if(err){
+
+    }else{
+      console.log("Planlist:  ",planslist);
+      response.send(planslist);
+    }
   });
 };
 

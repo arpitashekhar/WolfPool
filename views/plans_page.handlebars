@@ -37,6 +37,13 @@ $(document).ready(function() {
 
 					for(var i=0; i<len; i++){
 						item = json_data[i];
+						var passengers = "";
+						for(var j = 0; j < item.participants.length; j++){
+							if(j==0)
+								passengers = item.participants[j].email;
+							else
+								passengers = passengers + "," + item.participants[j].email;
+						}
 						var date_str = item.date.split("T");
 						var tr_str = "<tr>" +
 						"<td align='center' hidden='true'>" + item._id + "</td>" +
@@ -45,7 +52,7 @@ $(document).ready(function() {
 						"<td align='center'>" + date_str[0] + "</td>" +
 						"<td align='center'>" + item.time + "</td>" +
 						"<td align='center'>" + item.no_of_people + "</td>" +
-						"<td align='center'>" + item.emails + "</td>" +
+						"<td align='center'>" + passengers + "</td>" +
 						"<td align='center'>" + item.vacancy + "</td>" +
 						"<td><table><tr><td><button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='update_"+item._id+"' name='update'>Update</button></td>"+
 						"<td><button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='delete_"+item._id+"' name='delete'>Delete</button></td></td></tr></table></td>" +

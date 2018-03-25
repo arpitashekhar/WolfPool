@@ -24,7 +24,10 @@ var planSchema = new mongoose.Schema({
   src_distance: Number,
   dest_distance: Number,
   vacancy: Number,
-  emails: [String]
+  participants: [{ 
+    email: String,
+    no_of_people: Number
+  }]
 });
 
 module.exports = mongoose.model('Plan', planSchema);
