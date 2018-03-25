@@ -3,20 +3,23 @@
 </div>
 <div class="row">
 	<div class=col-lg-12 col-sm-12 id=result >
-			<table id="resultTable" class="table table-striped table-bordered table-dark">
-			<thead>
-				 <tr>
-				 <th hidden="true"></th>
-					<th>Source Address</th>
-					<th>Destination Address</th>
-					<th>Date (YYYY-MM-DD)</th>
-					<th>Time (24 hour format)</th>
-					<th>Number of people</th>
-					<th>Co-passengers</th>
-					<th>Vacancy</th>
-				 </tr>
-			</thead>
-	</table>
+			<form role="form" id="update_form_id" action="/updatePlan" name="update_form" method="POST" class="form-horizontal">
+				<table id="resultTable" class="table table-striped table-bordered table-dark">
+				<thead>
+					<tr>
+					<th hidden="true"></th>
+						<th>Source Address</th>
+						<th>Destination Address</th>
+						<th>Date (YYYY-MM-DD)</th>
+						<th>Time (24 hour format)</th>
+						<th>Number of people</th>
+						<th>Co-passengers</th>
+						<th>Vacancy</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				</table>
+			</form>
 	</div>
 </div>
 
@@ -44,20 +47,15 @@ $(document).ready(function() {
 						"<td align='center'>" + item.no_of_people + "</td>" +
 						"<td align='center'>" + item.emails + "</td>" +
 						"<td align='center'>" + item.vacancy + "</td>" +
+						"<td><button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='edit_"+item._id+"' name='edit'>Edit</button>" +
+						"<button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='delete_"+item._id+"' name='delete'>Delete</button></td>" +
 						"</tr>";
 						$("#resultTable").append(tr_str);
 					}
 					$('#resultTable').DataTable({
-
-
-
-						        order: [[ 1, 'asc' ]]
-
+					order: [[ 1, 'asc' ]]
 				});
-
 				}
-
-
 		}
 		,
 			error: function (request, status, error) {
@@ -67,4 +65,8 @@ $(document).ready(function() {
 	});
 
 });
+
+function setAction(submitButton){
+	submitButton.value = submitButton.id.split("_")[1];
+}
 </script>

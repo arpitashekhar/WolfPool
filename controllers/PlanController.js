@@ -59,6 +59,24 @@ exports.getPlans = function(request, response) {
   });
 };
 
+exports.updatePlans = function(request,response){
+  if(request.body.delete){
+    
+    var deletePlanQuery = { _id: request.body.delete };
+    Plan.remove(deletePlanQuery, (err, plans) => {
+      var message = "";
+      if(err){
+        message = "Unable to delete the plan. Please try again.";
+      }else{
+        message = "Plan deleted sucessfully.";
+      }
+      return response.render('info_page', {
+        data: message
+      });
+    });
+  }
+};
+
 exports.joinPlan = function(request, response) {
 
   var planId = request.body.selectedPlan;
@@ -92,7 +110,7 @@ exports.joinPlan = function(request, response) {
         if(error){
           console.log(error);
         }else{
-          return res.render('info_page', {
+          return response.render('info_page', {
             data: 'An email notification has been sent to your trip buddies.'
           });
         }

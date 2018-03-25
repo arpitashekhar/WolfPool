@@ -62,6 +62,7 @@ module.exports = function(app) {
   app.post('/searchPlan', PlanController.searchPlan);
   app.post('/joinPlan', PlanController.joinPlan);
   app.get('/get_plans', PlanController.getPlans);
+  app.post('/updatePlan',PlanController.updatePlans);
 
   // Routes related to User
   app.get('/verify_user/:email/:verfhash', UserController.verifyUser);
@@ -80,5 +81,4 @@ module.exports = function(app) {
   app.post('/createUser', UserController.createUser);
   app.post('/loginUser', UserController.loginUser);
   app.get('/profile_page', UserController.getProfile);
-
 };
