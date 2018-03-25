@@ -35,17 +35,14 @@
 				<input type="text" class="form-control" id="destination_id" name="destination" placeholder="Enter Destination Address">
 			</div>
 
-			{{#if plan}}
-			{{else}}
-				<div class="form-group">
-					<label for="no_of_people_id">Number of people: </label>
-					<input type="number" class="form-control" id="no_of_people_id" min="1" max="6" name="no_of_people">
-				</div>
-			{{/if}}
+			<div class="form-group">
+				<label for="no_of_people_id">Number of people: </label>
+				<input type="number" class="form-control" id="no_of_people_id" min="1" max="6" name="no_of_people">
+			</div>
 
 			<div class="form-group">
 				{{#if plan}}
-					<button type="submit" onclick="return setLocation()" class="btn btn-primary" id="update_btn" >Update Plan</button>
+					<button type="submit" onclick="return setLocation()" name="update_btn" class="btn btn-primary" id="update_btn" value="{{vacancy}}">Update Plan</button>
 				{{else}}
 					<button type="button" onclick="return getSimilarPlans()" class="btn btn-primary" id="similar_btn">View Similar Plans</button>
 					<button type="submit" onclick="return !!(confirm('Are you sure you want to create a new plan?'));" class="btn btn-danger" id="create_btn">Create a new Plan</button>
@@ -207,8 +204,7 @@
 					required: true,
 					min: 1,
 					max: 6
-				},
-
+				}
 			},
 			messages: {
 				date: {
@@ -344,6 +340,76 @@
 	}
 
 	function setLocation() {
+		$("#updateDetailsForm").validate({
+			rules: {
+				date: {
+					datecheck: true
+				},
+				time: {
+					timecheck: true
+				},
+				destination: {
+					notEqual: "#source_id"
+				},
+				no_of_people: {
+					exceedVac: true
+				}
+			},
+			messages: {
+				destination: {
+					notEqual: "Source and Destination Address cannot be same"
+				},
+				date: {
+					datecheck: "Please enter a valid date"
+				},
+				time: {
+					timecheck: "Please enter a valid date and time combination"
+				},
+				no_of_people: {
+					exceedVac: "A plan can have maximum of 6 people only"
+				}
+			}
+		});
+
+		$.validator.addMethod("datecheck", function(value) {
+			var y = new Date();
+			if (new Date(value + " 23:59:00") < y) {
+				return false;
+			}
+			return true;
+		});
+
+		$.validator.addMethod("timecheck", function(value) {
+			var x = document.forms["search_create_form"]["date"].value;
+			if(x){
+				x = new Date(x + " " + value + ":00");
+				var y = new Date();
+				if (x < y) {
+					return false;
+				}
+			}
+			return true;
+		});
+
+		$.validator.addMethod("notEqual", function(value) {
+			var x = document.forms["search_create_form"]["source"].value;
+			if(x){
+				var y = document.forms["search_create_form"]["destination"].value;
+				if (x == y) {
+					return false;
+				}
+			}
+			return true;
+		});
+
+		$.validator.addMethod("exceedVac", function(value) {
+			var planVacancy = document.forms["search_create_form"]["update_btn"].value;
+			if(value){
+				return planVacancy >= value;
+			}
+			return true;
+		});
+
 		if(sourceObject){
 			$('#source_lat').val(sourceObject.geometry.location.lat());
 			$('#source_long').val(sourceObject.geometry.location.lng());

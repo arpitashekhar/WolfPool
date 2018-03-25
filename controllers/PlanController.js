@@ -15,7 +15,6 @@ var checker = 0;
 exports.savePlan = function(request, response) {
   if (checker != 1) {
     var planModel = require('../models/plan');
-    var participantModel = require('../models/participant');
     
     // Create Participant
     var planData = new planModel({
@@ -64,7 +63,6 @@ exports.getPlans = function(request, response) {
     if(err){
 
     }else{
-      console.log("Planlist:  ",planslist);
       response.send(planslist);
     }
   });
@@ -91,44 +89,64 @@ exports.updatePlans = function(request,response){
           data: "Unable to update the plan. Please try again."
         });
       } else {
-        return response.render('home',{plan:plan});
+        memberIndex = plan.participants.findIndex((memberObj => memberObj.email == request.session.userEmail));
+        var existingCount = plan.participants[memberIndex].no_of_people;
+        var vacancy = +plan.vacancy + +existingCount
+        return response.render('home',{plan:plan,vacancy:vacancy});
       }
     });
   }
 };
 
 exports.saveUpdatedPlan = function(request,response){
-  var updateObject = {};
-  if(request.body.date){
-    updateObject.date = request.body.date;
-  }
-  if(request.body.time){
-    updateObject.time = request.body.time;
-  }
-  
-  if(request.body.source){
-    updateObject.source_id = request.body.source;
-    updateObject.source_lat = request.body.lat[0];
-    updateObject.source_long = request.body.lng[0];
-  }
-
-  if(request.body.destination){
-    updateObject.destination_id = request.body.destination;
-    updateObject.dest_lat = request.body.lat[1];
-    updateObject.dest_long = request.body.lng[1];
-  }
-  
   var updateQuery = { _id: request.body.planId };
-  Plan.update(updateQuery,updateObject,(err,plan)=>{
-    var message;
+  Plan.findOne(updateQuery,function(err, plan) {
     if(err){
-      message = "Unable to update the plan. Please try again."
+
     }else{
-      message = "Plan Updated Successfully."
+      
+      if(request.body.date){
+        plan.date = request.body.date;
+      }
+      
+      if(request.body.time){
+        plan.time = request.body.time;
+      }
+        
+      if(request.body.source){
+        plan.source_id = request.body.source;
+        plan.source_lat = request.body.lat[0];
+        plan.source_long = request.body.lng[0];
+      }
+      
+      if(request.body.destination){
+        plan.destination_id = request.body.destination;
+        plan.dest_lat = request.body.lat[1];
+        plan.dest_long = request.body.lng[1];
+      }
+      
+      if(request.body.no_of_people){
+        memberIndex = plan.participants.findIndex((memberObj => memberObj.email == request.session.userEmail));
+        var existingCount = plan.participants[memberIndex].no_of_people;
+        var newCount = request.body.no_of_people;
+        plan.vacancy = +plan.vacancy + +existingCount - +newCount;
+        plan.participants[memberIndex].no_of_people = newCount;
+        plan.no_of_people = 6 - +plan.vacancy;
+      }
+      
+      plan.save()
+      .then(item => {
+        response.render('info_page', {
+          data: "Plan Updated Successfully."
+        });
+      })
+      .catch(err => {
+        console.log(err)
+        response.render('info_page', {
+          data: "Unable to update the plan. Please try again."
+        });
+      });
     }
-    response.render('info_page', {
-      data: message
-    });
   });
 };
 
@@ -141,18 +159,20 @@ exports.joinPlan = function(request, response) {
     if (err) {
       response.status(500).send("The plan you selected got full. Please search again.");
     } else {
-      plan.emails.push(request.session.userEmail);
+      plan.participants.push({
+        email: request.session.userEmail,
+        no_of_people: numberOfPeople});
       plan.no_of_people = +plan.no_of_people + +numberOfPeople;
       plan.vacancy = +plan.vacancy - +numberOfPeople;
       plan.save();
-
+      
       // Send email to users in list that current user joined plan
       var emailList = "";
-      plan.emails.forEach(function(email) {
+      plan.participants.forEach(function(participant) {
         if(emailList.length == 0)
-          emailList = email;
+          emailList = participant.email;
         else
-          emailList = emailList + "," + email;
+          emailList = emailList + "," + participant.email;
       });
       
       // Send Email
@@ -183,7 +203,6 @@ exports.searchPlan = function(request, response) {
   // Show all existing plans that the user can join, along with an option to create
   checker=0;
   userRequest = request.body
-  // console.log(userRequest)
 
   var currSrc = {
     lat: userRequest.lat[0],
@@ -200,14 +219,13 @@ exports.searchPlan = function(request, response) {
     "time": {
       $gte: userRequest.time
     },
-    "emails": {
+    "participants.email": {
       $ne: request.session.userEmail
     },
     "vacancy": {
       $gte: userRequest.no_of_people
     }
   }; //Change to vacancy - no_of_people
-
   Plan.find(query, (err, plans) => {
     if (err) {
       response.status(500).send(err);
