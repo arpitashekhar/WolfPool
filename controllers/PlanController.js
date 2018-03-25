@@ -60,10 +60,9 @@ exports.getPlans = function(request, response) {
 };
 
 exports.updatePlans = function(request,response){
+  var planQuery = { _id: request.body.delete };
   if(request.body.delete){
-    
-    var deletePlanQuery = { _id: request.body.delete };
-    Plan.remove(deletePlanQuery, (err, plans) => {
+    Plan.remove(planQuery, (err, plans) => {
       var message = "";
       if(err){
         message = "Unable to delete the plan. Please try again.";
@@ -74,7 +73,52 @@ exports.updatePlans = function(request,response){
         data: message
       });
     });
+  }else if(request.body.update){
+    Plan.findById(request.body.update, function(err, plan) {
+      if (err) {
+        return response.render('info_page', {
+          data: "Unable to update the plan. Please try again."
+        });
+      } else {
+        return response.render('home',{plan:plan});
+      }
+    });
   }
+};
+
+exports.saveUpdatedPlan = function(request,response){
+  var updateObject = {};
+  if(request.body.date){
+    updateObject.date = request.body.date;
+  }
+  if(request.body.time){
+    updateObject.time = request.body.time;
+  }
+  
+  if(request.body.source){
+    updateObject.source_id = request.body.source;
+    updateObject.source_lat = request.body.lat[0];
+    updateObject.source_long = request.body.lng[0];
+  }
+
+  if(request.body.destination){
+    updateObject.destination_id = request.body.destination;
+    updateObject.dest_lat = request.body.lat[1];
+    updateObject.dest_long = request.body.lng[1];
+  }
+  
+  var updateQuery = { _id: request.body.planId };
+  Plan.update(updateQuery,updateObject,(err,plan)=>{
+    var message;
+    if(err){
+      message = "Unable to update the plan. Please try again."
+    }else{
+      message = "Plan Updated Successfully."
+    }
+    response.render('info_page', {
+      data: message
+    });
+  });
 };
 
 exports.joinPlan = function(request, response) {

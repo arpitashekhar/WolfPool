@@ -59,6 +59,7 @@ module.exports = function(app) {
 
   // Routes related to Plan
   app.post('/savePlan', PlanController.savePlan);
+  app.post('/saveUpdatedPlan', PlanController.saveUpdatedPlan);
   app.post('/searchPlan', PlanController.searchPlan);
   app.post('/joinPlan', PlanController.joinPlan);
   app.get('/get_plans', PlanController.getPlans);

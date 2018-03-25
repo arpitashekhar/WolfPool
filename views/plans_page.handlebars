@@ -47,9 +47,10 @@ $(document).ready(function() {
 						"<td align='center'>" + item.no_of_people + "</td>" +
 						"<td align='center'>" + item.emails + "</td>" +
 						"<td align='center'>" + item.vacancy + "</td>" +
-						"<td><button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='edit_"+item._id+"' name='edit'>Edit</button>" +
-						"<button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='delete_"+item._id+"' name='delete'>Delete</button></td>" +
+						"<td><table><tr><td><button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='update_"+item._id+"' name='update'>Update</button></td>"+
+						"<td><button type='submit' class='btn btn-primary' onClick='setAction(this)' form='update_form_id' id='delete_"+item._id+"' name='delete'>Delete</button></td></td></tr></table></td>" +
 						"</tr>";
+						
 						$("#resultTable").append(tr_str);
 					}
 					$('#resultTable').DataTable({
