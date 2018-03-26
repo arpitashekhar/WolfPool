@@ -9,7 +9,9 @@ var smtpTransport=nodemailer.createTransport({
 		pass: process.env.mailPass
 	}
 });
-
+var lyft = require("node-lyft");
+var apiRequest = require('request');
+var fareEstimates = {estimates:[]};
 var checker = 0;
 
 exports.savePlan = function(request, response) {
@@ -94,6 +96,21 @@ exports.updatePlans = function(request,response){
         var vacancy = +plan.vacancy + +existingCount
         return response.render('home',{plan:plan,vacancy:vacancy});
       }
+    });
+  }else if(request.body.estimate){
+    Plan.findById(request.body.estimate, function(err, plan) {
+      var message = "";
+      if(err){
+        console.log(err);
+        message = "Unable to get fare.";
+      }else{
+        getEstimates(plan);
+        console.log("From main.");
+        printEstimates();
+      }
+      response.render('info_page', {
+        data: "Fare Estimation has been fetched. But I am unable to aggragate that together and push those details to this page."
+      });
     });
   }
 };
@@ -279,3 +296,79 @@ exports.searchPlan = function(request, response) {
     }
   });
 };
+
+function getEstimates(plan){
+  getUberEstimates(plan);
+  getLyftEstimates(plan);
+}
+
+function getUberEstimates(plan){
+  var uberApiUrl = "https://api.uber.com/v1.2/";
+  var uberServerToken = process.env.uberToken;
+  apiRequest.get({
+    url : uberApiUrl + 'estimates/price',
+    strictSSL: false,
+    qs : {
+      server_token : uberServerToken,
+      start_latitude : plan.source_lat,
+      start_longitude : plan.source_long,
+      end_latitude : plan.dest_lat,
+      end_longitude : plan.dest_long
+    }
+  }, function(err, response, body){
+    if(err){
+      console.log(err);
+    }else{
+      var uberResponse = JSON.parse(body);
+      var estimate = {name:"Uber",types:[]};
+      for(var i = 0; i < uberResponse.prices.length; i++){
+        var currentPrice = uberResponse.prices[i];
+        var type = {typeName:currentPrice.localized_display_name,typeCost:currentPrice.estimate};
+        estimate.types.push(type);
+      }
+      fareEstimates.estimates.push(estimate);
+      console.log("From Uber.");
+      printEstimates();
+    }
+  });
+
+}
+
+function getLyftEstimates(plan){
+  let defaultClient = lyft.ApiClient.instance;
+  // Configure OAuth2 access token for authorization: Client Authentication
+  let clientAuth = defaultClient.authentications['Client Authentication'];
+  clientAuth.accessToken = process.env.lyftToken;
+  let apiInstance = new lyft.PublicApi();
+
+  let opts = { 
+    'endLat': plan.dest_lat, // Latitude of the ending location
+    'endLng': plan.dest_long // Longitude of the ending location
+  };
+
+  apiInstance.getCost(plan.source_lat, plan.source_long, opts).then((data) => {
+    var estimate = {name:"Lyft",types:[]};
+    for(var i = 0; i < data.cost_estimates.length; i++){
+      var currentCostEstimate = data.cost_estimates[i];
+      var rideCost = "$"+currentCostEstimate.estimated_cost_cents_max / 100+"-"+currentCostEstimate.estimated_cost_cents_min / 100;
+      var type = {typeName:currentCostEstimate.ride_type,typeCost:rideCost};
+      estimate.types.push(type);
+    }
+    fareEstimates.estimates.push(estimate);
+    console.log("From Lyft.");
+    printEstimates();
+  }, (error) => {
+    console.error(error);
+  });
+}
+
+function printEstimates(){
+  for(var i =0; i < fareEstimates.estimates.length;i++){
+    var currentEstimate = fareEstimates.estimates[i];
+    console.log("Name: ",currentEstimate.name);
+    for(var j = 0; j < currentEstimate.types.length; j++){
+      var currentType = currentEstimate.types[j];
+      console.log("Name: ",currentType.typeName," Cost: ",currentType.typeCost);
+    }
+  }
+}
