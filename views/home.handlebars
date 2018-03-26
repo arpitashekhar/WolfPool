@@ -37,7 +37,11 @@
 
 			<div class="form-group">
 				<label for="no_of_people_id">Number of people: </label>
+			{{#if plan}}
+				<input type="number" class="form-control" id="no_of_people_id" min="0" max="6" name="no_of_people">
+			{{else}}
 				<input type="number" class="form-control" id="no_of_people_id" min="1" max="6" name="no_of_people">
+			{{/if}}	
 			</div>
 
 			<div class="form-group">

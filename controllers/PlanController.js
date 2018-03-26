@@ -127,25 +127,48 @@ exports.saveUpdatedPlan = function(request,response){
       
       if(request.body.no_of_people){
         memberIndex = plan.participants.findIndex((memberObj => memberObj.email == request.session.userEmail));
-        var existingCount = plan.participants[memberIndex].no_of_people;
         var newCount = request.body.no_of_people;
-        plan.vacancy = +plan.vacancy + +existingCount - +newCount;
-        plan.participants[memberIndex].no_of_people = newCount;
+        var existingCount = plan.participants[memberIndex].no_of_people;
+        plan.vacancy = +plan.vacancy + +existingCount;
+        var savePlan = true;
+        if(newCount == 0){
+          plan.participants[memberIndex].remove();
+          console.log("Participants: ",plan.participants.length);
+          if(plan.participants.length == 0){
+            savePlan = false;
+            plan.remove()
+            .then(item => {
+              return response.render('info_page', {
+                data: "Plan Updated Successfully. As no other participant is present plan is deleted."
+              });
+            })
+            .catch(err => {
+              return response.render('info_page', {
+                data: "Unable to update the plan. Please try again."
+              });
+            });
+          }
+        }else{
+          plan.vacancy = +plan.vacancy - +newCount;
+          plan.participants[memberIndex].no_of_people = newCount;
+        }
         plan.no_of_people = 6 - +plan.vacancy;
       }
-      
-      plan.save()
-      .then(item => {
-        response.render('info_page', {
-          data: "Plan Updated Successfully."
+      console.log("Plan: ",plan);
+      if(savePlan){
+        plan.save()
+        .then(item => {
+          response.render('info_page', {
+            data: "Plan Updated Successfully."
+          });
+        })
+        .catch(err => {
+          console.log(err)
+          response.render('info_page', {
+            data: "Unable to update the plan. Please try again."
+          });
         });
-      })
-      .catch(err => {
-        console.log(err)
-        response.render('info_page', {
-          data: "Unable to update the plan. Please try again."
-        });
-      });
+      }
     }
   });
 };
