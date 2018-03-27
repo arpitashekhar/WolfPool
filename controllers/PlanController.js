@@ -241,7 +241,6 @@ exports.saveUpdatedPlan = function(request,response){
         }
         plan.no_of_people = 6 - +plan.vacancy;
       }
-      console.log("Plan: ",plan);
       if(savePlan){
         plan.save()
         .then(item => {
