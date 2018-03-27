@@ -55,7 +55,6 @@ exports.savePlan = function(request, response) {
   }
 };
 
-
 exports.getPlans = function(request, response) {
 
   Plan.find({
@@ -75,19 +74,23 @@ exports.updatePlans = function(request,response){
     Plan.remove(planQuery, (err, plans) => {
       var message = "";
       if(err){
-        message = "Unable to delete the plan. Please try again.";
+        message = "Unable to delete the plan. Please try again. Go Back to";
       }else{
-        message = "Plan deleted sucessfully.";
+        message = "Plan deleted sucessfully. Go Back to";
       }
       return response.render('info_page', {
-        data: message
+        data: message,
+        name: 'Your Rides',
+        link: 'plans_page'
       });
     });
   }else if(request.body.update){
     Plan.findById(request.body.update, function(err, plan) {
       if (err) {
         return response.render('info_page', {
-          data: "Unable to update the plan. Please try again."
+          data: "Unable to update the plan. Please try again. Go Back to",
+          name: 'Your Rides',
+          link: 'plans_page'
         });
       } else {
         memberIndex = plan.participants.findIndex((memberObj => memberObj.email == request.session.userEmail));
@@ -101,7 +104,11 @@ exports.updatePlans = function(request,response){
       var message = "";
       if(err){
         console.log(err);
-        message = "Unable to get fare.";
+        response.render('info_page', {
+          data: "Unable to get fare estimates. Please try again. Go Back to",
+          name: 'Your Rides',
+          link: 'plans_page'
+        });
       }else{
         
         var fareEstimates = {estimates:[]};
@@ -215,12 +222,16 @@ exports.saveUpdatedPlan = function(request,response){
             plan.remove()
             .then(item => {
               return response.render('info_page', {
-                data: "Plan Updated Successfully. As no other participant is present plan is deleted."
+                data: "Plan Updated Successfully. As no other participant is present plan is deleted. Go Back to",
+                name: 'Your Rides',
+                link: 'plans_page'
               });
             })
             .catch(err => {
               return response.render('info_page', {
-                data: "Unable to update the plan. Please try again."
+                data: "Unable to update the plan. Please try again. Go Back to",
+                name: 'Your Rides',
+                link: 'plans_page'
               });
             });
           }
@@ -235,13 +246,17 @@ exports.saveUpdatedPlan = function(request,response){
         plan.save()
         .then(item => {
           response.render('info_page', {
-            data: "Plan Updated Successfully."
+            data: "Plan Updated Successfully. Go Back to",
+            name: 'Your Rides',
+            link: 'plans_page'
           });
         })
         .catch(err => {
           console.log(err)
           response.render('info_page', {
-            data: "Unable to update the plan. Please try again."
+            data: "Unable to update the plan. Please try again. Go Back to",
+            name: 'Your Rides',
+            link: 'plans_page'
           });
         });
       }
