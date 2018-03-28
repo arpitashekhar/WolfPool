@@ -185,9 +185,9 @@ exports.saveUpdatedPlan = function(request,response){
   var updateQuery = { _id: request.body.planId };
   Plan.findOne(updateQuery,function(err, plan) {
     if(err){
-
+      console.log(err);
     }else{
-      
+      var savePlan = true;
       if(request.body.date){
         plan.date = request.body.date;
       }
@@ -213,10 +213,8 @@ exports.saveUpdatedPlan = function(request,response){
         var newCount = request.body.no_of_people;
         var existingCount = plan.participants[memberIndex].no_of_people;
         plan.vacancy = +plan.vacancy + +existingCount;
-        var savePlan = true;
         if(newCount == 0){
           plan.participants[memberIndex].remove();
-          console.log("Participants: ",plan.participants.length);
           if(plan.participants.length == 0){
             savePlan = false;
             plan.remove()
