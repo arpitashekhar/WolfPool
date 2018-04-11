@@ -2,8 +2,10 @@ var nodemailer=require("nodemailer");
 var smtpTransport=nodemailer.createTransport({
 	service: "gmail",
 	auth:{
-		user: process.env.mailUser,
-		pass: process.env.mailPass
+  //	user: process.env.mailUser,
+  user: "aishwaryassr@gmail.com",
+    //pass: process.env.mailPass
+    pass: "Macrohard.123"
 	}
 });
 
@@ -15,7 +17,7 @@ exports.createUser = function(req, res){
 
   // Check if all parameters are passed
   if (req.body.email && req.body.name && req.body.password) {
-
+      console.log(req.body.email)
       var verfhash = md5(req.body.email+(new Date()).getTime());
       var userData = {
         email: req.body.email,
