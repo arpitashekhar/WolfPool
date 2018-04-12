@@ -3,7 +3,7 @@ var UserController = require('./controllers/UserController');
 var PlanController = require('./controllers/PlanController');
 
 // Routes
-module.exports = function(app,sw) {
+module.exports = function(app) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: true

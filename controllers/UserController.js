@@ -10,7 +10,7 @@ var smtpTransport=nodemailer.createTransport({
 	}
 });
 
-
+var authurl;
 var schedule = require('node-schedule');
 exports.createUser = function(req, res){
 
@@ -84,18 +84,19 @@ exports.getProfile = function(req,res){
         .then(function(doc){
 
           var AuthApi = require('splitwise-node');
-var userOAuthToken, userOAuthTokenSecret,authurl,flag;
+var userOAuthToken, userOAuthTokenSecret,flag;
 var authApi = new AuthApi('reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf', 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB');
 
 authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
   [userOAuthToken, userOAuthTokenSecret] = [oAuthToken, oAuthTokenSecret];
   console.log(oAuthToken.token)
+  var x=oAuthToken.token
   authurl=authApi.getUserAuthorisationUrl(oAuthToken.token);
   console.log(authurl);
   flag=true;
-  res.render('profile_page',{items: doc,authurl: authurl,flag: flag});
+  res.render('profile_page',{items: doc,token: x,flag: flag});
 });
-        // console.log(authurl);
+       
          
 
         });
