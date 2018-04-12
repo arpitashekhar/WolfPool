@@ -13,6 +13,13 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+//Splitwise code
+
+
+//const group_id = '12345678'
+
+
+
 // Handlebar Code
 handlebars = handlebars.create({
   defaultLayout: 'main'
@@ -37,10 +44,27 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 
 app.use(expressValidator());
+/*const Splitwise = require('splitwise')
+Splitwise({
+  consumerKey: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf',
+  consumerSecret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+}).getAccessToken().then(console.log)
+const sw =Splitwise({
+  consumerKey: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf',
+  consumerSecret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB',
+ // accessToken='ZJYI7KIkch3WW3EFLK1L1dIdIOgiIbFrZ60ni5bB',
+  logger: console.log,
+  logLevel: 'error'
+}) */
+
 
 // send app to router
 require('./router')(app);
 
 app.listen(app.get('port'), function() {
   console.log('Express started on http://localhost:' + app.get('port') + ' press Ctrl-C to terminate');
+  //console.log(sw.getAccessToken())
+
+
+ 
 });

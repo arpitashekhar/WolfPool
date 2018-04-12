@@ -1,3 +1,4 @@
+
 var nodemailer=require("nodemailer");
 var smtpTransport=nodemailer.createTransport({
 	service: "gmail",
@@ -8,6 +9,7 @@ var smtpTransport=nodemailer.createTransport({
     pass: "Macrohard.123"
 	}
 });
+
 
 var schedule = require('node-schedule');
 exports.createUser = function(req, res){
@@ -80,8 +82,22 @@ exports.getProfile = function(req,res){
       var User = require('../models/user');
        User.find({"_id":req.session.userId})
         .then(function(doc){
-          //console.log(doc);
-          res.render('profile_page',{items:doc});
+
+          var AuthApi = require('splitwise-node');
+var userOAuthToken, userOAuthTokenSecret,authurl,flag;
+var authApi = new AuthApi('reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf', 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB');
+
+authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
+  [userOAuthToken, userOAuthTokenSecret] = [oAuthToken, oAuthTokenSecret];
+  console.log(oAuthToken.token)
+  authurl=authApi.getUserAuthorisationUrl(oAuthToken.token);
+  console.log(authurl);
+  flag=true;
+  res.render('profile_page',{items: doc,authurl: authurl,flag: flag});
+});
+        // console.log(authurl);
+         
+
         });
     } else {
       res.render('info_page',{data: 'You must be logged in to view this page. Back to ', name:'login', link:'login_page'});

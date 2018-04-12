@@ -28,13 +28,18 @@
     "haversine-distance": "^1.1.3",
     "jquery": "^3.3.1",
     "json": "^9.0.6",
+    "lodash.flatten": "^4.4.0",
     "md5": "^2.2.1",
     "mongodb": "^3.0.2",
     "mongoose": "^5.0.8",
     "node-lyft": "^1.0.3",
     "node-schedule": "^1.3.0",
     "nodemailer": "^4.4.2",
+    "oauth": "^0.9.15",
     "popper.js": "^1.12.9",
+    "promise": "^8.0.1",
+    "splitwise": "^1.0.0",
+    "splitwise-node": "^0.3.3",
     "validator": "^9.4.0"
   }
 }

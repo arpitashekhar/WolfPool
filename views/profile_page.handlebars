@@ -5,13 +5,18 @@
 <div class="row">
   <div class="profilePage">
     <form id="profile_form_id" class="formProfilePages" role="form" name="profile_form" action="/profile_page" method="POST">
+
       {{#each items}}
         <div class="col-lg-6">
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" value= {{this.name}} name="name">
+            <a href="{{authurl}}">splitwiseurl</a>
           </div>
+ 
 
+      
+  
           <div class="form-group">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" value= {{this.email}} placeholder="abc@xyz.edu" readonly>
