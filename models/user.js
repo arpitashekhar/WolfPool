@@ -23,6 +23,8 @@ var userSchema = new mongoose.Schema({
   verification_hash: String,
   university: String,
   address: String,
+  oauth_token: String,
+  oauth_verifier: String,
   created_date: { type: Date, default: Date.now }
 });
 

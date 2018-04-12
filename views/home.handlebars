@@ -8,6 +8,7 @@
 
 <div class="row">
 	<div class="col-lg-4">
+		<p>{{response}}</p>
 		{{#if plan}}
 			<form role="form" action="/saveUpdatedPlan" name="search_create_form" method="POST" id="updateDetailsForm">
 			<input type="hidden" class="form-control" id="planId" name="planId" value="{{plan._id}}">

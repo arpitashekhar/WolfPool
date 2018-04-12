@@ -17,11 +17,33 @@ module.exports = function(app) {
   // General routes
   app.get('/', function(req, res) {
     if (req.session && req.session.userId) {
-      res.render('home');
+      //console.log(req.query.oauth_token)
+      //console.log(req.query.oauth_verifier)
+      if(req.query.oauth_token && req.query.oauth_verifier)
+        {
+          User.find({email: req.session.email},function(err,docs){
+            if(err)
+             throw err;
+             const user1={oauth_token: req.query.oauth_token,oauth_verifier: req.query.oauth_verifier}
+            User.update({email: req.session.email},user1,function(er,doc){
+                       if(er)
+                        throw er
+                       console.log("oauth token and verifier saved successfully"); 
+            }) 
+          })
+        }
+      res.render('home',{response: req});
     } else {
       res.render('login');
     }
   });
+  app.post('/',function(req,res){
+    console.log(req.query.oauth_token)
+    console.log(res);
+    console.log(res.body.oauth_token);
+    console.log(req.body.oauth_verifier);
+    res.render('home',{response: req});
+  })
 
   app.get('/help', function(req, res) {
     res.render('help');
@@ -82,4 +104,7 @@ module.exports = function(app) {
   app.post('/createUser', UserController.createUser);
   app.post('/loginUser', UserController.loginUser);
   app.get('/profile_page', UserController.getProfile);
+  app.get('/splitwise',UserController.splitwise);
+ 
+  
 };

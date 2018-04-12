@@ -10,7 +10,7 @@ var smtpTransport=nodemailer.createTransport({
 	}
 });
 
-var authurl;
+var authurl,splitwiseApi;
 var schedule = require('node-schedule');
 exports.createUser = function(req, res){
 
@@ -75,15 +75,9 @@ exports.createUser = function(req, res){
     return res.redirect('/');
   }
 };
-
-exports.getProfile = function(req,res){
-
-  if (req.session && req.session.userId) {
-      var User = require('../models/user');
-       User.find({"_id":req.session.userId})
-        .then(function(doc){
-
-          var AuthApi = require('splitwise-node');
+exports.splitwise=function(req,res){
+  if(req.session && req.session.userId){
+    var AuthApi = require('splitwise-node');
 var userOAuthToken, userOAuthTokenSecret,flag;
 var authApi = new AuthApi('reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf', 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB');
 
@@ -94,9 +88,35 @@ authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
   authurl=authApi.getUserAuthorisationUrl(oAuthToken.token);
   console.log(authurl);
   flag=true;
-  res.render('profile_page',{items: doc,token: x,flag: flag});
-});
-       
+ // splitwiseApi=authApi.getSplitwiseApi(userOAuthToken, userOAuthTokenSecret);
+  //console.log(splitwiseApi.get_current_user())
+  res.render('splitwise',{token: x});
+ 
+
+  });
+}
+}
+exports.getProfile = function(req,res){
+  var User = require('../models/user');
+  if (req.session && req.session.userId) {
+    if(req.query.oauth_token && req.query.oauth_verifier)
+    {
+    console.log(req.query.oauth_token,req.query.oauth_verifier,req.session.userEmail);
+    const user={oauth_token: req.query.oauth_token,oauth_verifier: req.query.oauth_verifier}
+    User.update({email: req.session.userEmail},user,function(er,doc){
+      if(er)
+       {
+       throw er
+       }
+      console.log("token saved successfully") 
+    })
+    }
+      var User = require('../models/user');
+       User.find({"_id":req.session.userId})
+        .then(function(doc){
+
+ 
+  res.render('profile_page',{items: doc});
          
 
         });
@@ -104,6 +124,7 @@ authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
       res.render('info_page',{data: 'You must be logged in to view this page. Back to ', name:'login', link:'login_page'});
     }
 };
+
 
 exports.updateProfile = function(req,res){
   var User = require('../models/user');
