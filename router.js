@@ -19,20 +19,8 @@ module.exports = function(app) {
     if (req.session && req.session.userId) {
       //console.log(req.query.oauth_token)
       //console.log(req.query.oauth_verifier)
-      if(req.query.oauth_token && req.query.oauth_verifier)
-        {
-          User.find({email: req.session.email},function(err,docs){
-            if(err)
-             throw err;
-             const user1={oauth_token: req.query.oauth_token,oauth_verifier: req.query.oauth_verifier}
-            User.update({email: req.session.email},user1,function(er,doc){
-                       if(er)
-                        throw er
-                       console.log("oauth token and verifier saved successfully"); 
-            }) 
-          })
-        }
-      res.render('home',{response: req});
+      
+      res.render('home',{oauth_token: req.query.oauth_verifier,oauth_verifier: req.query.oauth_verifier});
     } else {
       res.render('login');
     }
@@ -105,6 +93,7 @@ module.exports = function(app) {
   app.post('/loginUser', UserController.loginUser);
   app.get('/profile_page', UserController.getProfile);
   app.get('/splitwise',UserController.splitwise);
- 
+//  app.post('/splitwise'.UserController.splitwise);
+ //app.get('https://secure.splitwise.com/api/v3.0/get_current_user',UserController.getuser);
   
 };

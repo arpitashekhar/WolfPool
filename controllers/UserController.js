@@ -10,7 +10,8 @@ var smtpTransport=nodemailer.createTransport({
 	}
 });
 
-var authurl,splitwiseApi;
+var request=require('request');
+var authurl,splitwiseApi,userOAuthToken, userOAuthTokenSecret,authApi;
 var schedule = require('node-schedule');
 exports.createUser = function(req, res){
 
@@ -78,40 +79,100 @@ exports.createUser = function(req, res){
 exports.splitwise=function(req,res){
   if(req.session && req.session.userId){
     var AuthApi = require('splitwise-node');
-var userOAuthToken, userOAuthTokenSecret,flag;
-var authApi = new AuthApi('reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf', 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB');
+var flag;
+authApi = new AuthApi('reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf', 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB');
 
 authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
-  [userOAuthToken, userOAuthTokenSecret] = [oAuthToken, oAuthTokenSecret];
-  console.log(oAuthToken.token)
+  
+  [userOAuthToken, userOAuthTokenSecret] = [oAuthToken.token, oAuthToken.secret];
+
+  console.log(userOAuthToken,userOAuthTokenSecret);
   var x=oAuthToken.token
   authurl=authApi.getUserAuthorisationUrl(oAuthToken.token);
-  console.log(authurl);
+  
   flag=true;
- // splitwiseApi=authApi.getSplitwiseApi(userOAuthToken, userOAuthTokenSecret);
-  //console.log(splitwiseApi.get_current_user())
+ 
   res.render('splitwise',{token: x});
  
 
   });
 }
 }
+
+
 exports.getProfile = function(req,res){
   var User = require('../models/user');
   if (req.session && req.session.userId) {
     if(req.query.oauth_token && req.query.oauth_verifier)
     {
-    console.log(req.query.oauth_token,req.query.oauth_verifier,req.session.userEmail);
+    console.log(userOAuthToken, userOAuthTokenSecret);
+   splitwiseApi = authApi.getSplitwiseApi(userOAuthToken, userOAuthTokenSecret);
+    console.log(splitwiseApi.get_currencies)
+
     const user={oauth_token: req.query.oauth_token,oauth_verifier: req.query.oauth_verifier}
-    User.update({email: req.session.userEmail},user,function(er,doc){
-      if(er)
-       {
-       throw er
-       }
-      console.log("token saved successfully") 
+      User.update({email: req.session.userEmail},user,function(er,doc){
+        if(er)
+        {
+        throw er
+        }
+        console.log("token saved successfully") 
+
+      })
+      var qs = require('querystring')
+
+    var oauth =
+      { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+      , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+      , token: userOAuthToken
+      , token_secret: userOAuthTokenSecret
+      , verifier: req.query.oauth_verifier
+      }
+    , url = 'https://secure.splitwise.com/oauth/access_token';
+    
+  request.post({url:url, oauth:oauth}, function (e, r, body) {
+    // ready to make signed requests on behalf of the user
+    var perm_data = qs.parse(body)
+      , oauth =
+        { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+        , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+        , token: perm_data.oauth_token
+        , token_secret: perm_data.oauth_token_secret
+        }
+      , url = 'https://secure.splitwise.com/api/v3.0/get_current_user';
+
+    request.get({url:url, oauth:oauth, json:true}, function (e, r, user) {
+      console.log(user)
     })
+  })
+
+
+
+
+
+
+
+      
+      var url = "http://secure.splitwise.com/api/v3.0/get_current_user?"+"oauth_token="+req.query.oauth_token+"&oauth_verifier="+req.query.oauth_verifier
+      console.log(url)
+
+      request({
+          url: url,
+          oauth_token: req.query.oauth_token,
+          oauth_verifier: req.query.oauth_verifier,
+
+         // html: true,
+         json: true
+      }, function (error, response, body) {
+      
+         // if (!error && response.statusCode === 200) {
+              
+              console.log(body) // Print the json response
+          //}
+      })
+
     }
-      var User = require('../models/user');
+
+     // var User = require('../models/user');
        User.find({"_id":req.session.userId})
         .then(function(doc){
 
