@@ -11,7 +11,7 @@ var smtpTransport=nodemailer.createTransport({
 });
 
 var request=require('request');
-var authurl,splitwiseApi,userOAuthToken, userOAuthTokenSecret,authApi;
+var authurl,splitwiseApi,userOAuthToken, userOAuthTokenSecret,authApi,userparameters;
 var schedule = require('node-schedule');
 exports.createUser = function(req, res){
 
@@ -86,7 +86,7 @@ authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
   
   [userOAuthToken, userOAuthTokenSecret] = [oAuthToken.token, oAuthToken.secret];
 
-  console.log(userOAuthToken,userOAuthTokenSecret);
+  //console.log(userOAuthToken,userOAuthTokenSecret);
   var x=oAuthToken.token
   authurl=authApi.getUserAuthorisationUrl(oAuthToken.token);
   
@@ -105,9 +105,9 @@ exports.getProfile = function(req,res){
   if (req.session && req.session.userId) {
     if(req.query.oauth_token && req.query.oauth_verifier)
     {
-    console.log(userOAuthToken, userOAuthTokenSecret);
+    //console.log(userOAuthToken, userOAuthTokenSecret);
    splitwiseApi = authApi.getSplitwiseApi(userOAuthToken, userOAuthTokenSecret);
-    console.log(splitwiseApi.get_currencies)
+    //console.log(splitwiseApi.get_currencies)
 
     const user={oauth_token: req.query.oauth_token,oauth_verifier: req.query.oauth_verifier}
       User.update({email: req.session.userEmail},user,function(er,doc){
@@ -141,7 +141,11 @@ exports.getProfile = function(req,res){
       , url = 'https://secure.splitwise.com/api/v3.0/get_current_user';
 
     request.get({url:url, oauth:oauth, json:true}, function (e, r, user) {
-      console.log(user)
+
+      var val=JSON.stringify(user)
+      var injson=JSON.parse(val)
+      userparameters=injson.user;
+   
     })
   })
 
