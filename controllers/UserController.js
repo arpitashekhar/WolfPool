@@ -148,17 +148,7 @@ exports.getProfile = function(req,res){
    
     })
   })
-
-
-
-
-
-
-
-      
-      var url = "http://secure.splitwise.com/api/v3.0/get_current_user?"+"oauth_token="+req.query.oauth_token+"&oauth_verifier="+req.query.oauth_verifier
-      console.log(url)
-
+    var url = "http://secure.splitwise.com/api/v3.0/get_current_user?"+"oauth_token="+req.query.oauth_token+"&oauth_verifier="+req.query.oauth_verifier
       request({
           url: url,
           oauth_token: req.query.oauth_token,
@@ -168,10 +158,8 @@ exports.getProfile = function(req,res){
          json: true
       }, function (error, response, body) {
       
-         // if (!error && response.statusCode === 200) {
-              
-              console.log(body) // Print the json response
-          //}
+         console.log(body) // Print the json response
+          
       })
 
     }
@@ -179,9 +167,8 @@ exports.getProfile = function(req,res){
      // var User = require('../models/user');
        User.find({"_id":req.session.userId})
         .then(function(doc){
-
  
-  res.render('profile_page',{items: doc});
+        res.render('profile_page',{items: doc});
          
 
         });

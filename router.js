@@ -93,7 +93,5 @@ module.exports = function(app) {
   app.post('/loginUser', UserController.loginUser);
   app.get('/profile_page', UserController.getProfile);
   app.get('/splitwise',UserController.splitwise);
-//  app.post('/splitwise'.UserController.splitwise);
- //app.get('https://secure.splitwise.com/api/v3.0/get_current_user',UserController.getuser);
   
 };

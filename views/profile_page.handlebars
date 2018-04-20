@@ -5,7 +5,7 @@
 <div class="row">
   <div class="profilePage">
     <form id="profile_form_id" class="formProfilePages" role="form" name="profile_form" action="/profile_page" method="POST">
- <a href="https://secure.splitwise.com/authorize?oauth_token={{token}}">splitwise</a>
+    
       {{#each items}}
         <div class="col-lg-6">
           <div class="form-group">
@@ -69,7 +69,10 @@
             <label for="cnfpassword">Confirm Password</label>
             <input type="password" class="form-control" id="cnfpassword" name="cnfpassword">
           </div>
-
+          <div class="form-group">
+            <label for="splitwise">Splitwise</label><br>
+            <a href="https://secure.splitwise.com/authorize?oauth_token={{token}}">Check Balance</a>
+          </div>
           <div class="form-group">
             <button type="submit" class="btn btn-primary">Update Profile</button>
             <a href="/"><button type="button" class="btn btn-danger">Cancel</button></a>
