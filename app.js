@@ -8,7 +8,7 @@ var expressValidator = require('express-validator');
 var geolib = require('geolib');
 
 // Database code
-mongoose.connect('mongodb://localhost:27017/wolfpool');
+mongoose.connect('mongodb://asundar2:Qwerty123@ds153869.mlab.com:53869/wolfpool');
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

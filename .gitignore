@@ -1,14 +1,21 @@
-/node_modules/*
+/node_modules
+npm-debug.log
 .DS_Store
-se.pem
-mailjet_init.sh
+/*.env
+package-lock.json
+.vscodep
+#/node_modules/*
+#.DS_Store
+#se.pem
+#mailjet_init.sh
 
 # Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+#.elasticbeanstalk/*
+#!.elasticbeanstalk/*.cfg.yml
+#!.elasticbeanstalk/*.global.yml
 
 #Package Lock
-package-lock.json
+#package-lock.json
 
-.vscode
+#.vscode
+
