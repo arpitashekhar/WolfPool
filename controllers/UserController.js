@@ -6,7 +6,7 @@ var smtpTransport=nodemailer.createTransport({
   //	user: process.env.mailUser,
   user: "aishwaryassr@gmail.com",
     //pass: process.env.mailPass
-    pass: "Macrohard.123"
+    pass: "Admire2772"
 	}
 });
 
