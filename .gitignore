@@ -10,3 +10,5 @@ mailjet_init.sh
 
 #Package Lock
 package-lock.json
+
+.vscode
