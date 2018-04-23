@@ -97,7 +97,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## More about the research, references and inspiration for the project
 
-* Reasearch: [wolfpool-report1-group-f.pdf](/reports/wolfpool-report1-group-f.pdf)
+* Reasearch: [wolfpool-report1-group-f.pdf](/reports/SE_Project2.pdf)
 * [Google Maps API](https://developers.google.com/maps/documentation/javascript/places-autocomplete)
 * [Authentication in Node.js using MongoDB](https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359)
 
