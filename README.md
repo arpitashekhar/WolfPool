@@ -118,36 +118,55 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
     - Email
     - Password
     - Confirm Password 
+    
     ![register](/readme_files/register.png)
+    
 2. The verification email will be sent to the email id entered during the registration. Verify the email and it will be navigated to the WolfPool application.
+
 3. Login to the application by Email and Password.
+
     ![login](/readme_files/login.png)
+    
 4. The profile page can be updated by the clicking the "Profile" option on the main bar.
+
     ![profile](/readme_files/profile.png)
+    
 5. After login, enter the follwing details to find the matching plan. If there is no matching plan then create a new plan.
      - Date
      - Name
      - Source
      - Destination
      - Number of people
+     
      ![create plan](/readme_files/createPlan.png)
+     
 6. After "Your trips" option is chosen, all the trip details will be displayed in the tabular format.
+
      ![trips](/readme_files/trips.png)
+     
 7. The estimated fares for a particular trip can be obtained by chosing the option which is displayed beside each trip.
+
 8. The trip can be updated by choosing the option which is displayed beside each trip description. The following data should be entered to update the plan.
      - Date
      - Name
      - Source
      - Destination
      - Number of people
+     
      ![update](/readme_files/update.png)
+     
 9. The trip can be deleted by choosing the option which is displayed beside each trip description.
-     ![delete](/readme_files/delete.png)
-10. The expense can be tracked by using the integrated splitwise. Login to Splitwise application and track the expense. Click "Splitwise Expense Tracking" button. It will be navigated to the Splitwise. 
+     
+10. The expense can be tracked by using the integrated splitwise. Login to Splitwise application and track the expense. Click "Splitwise Expense Tracking" button. It will be navigated to the Splitwise.
+
      ![split](/readme_files/split.png)
+     
 11. The user can settle the amount by using the integrated PayPal. Login to PayPal application and settle payments. Click "Settle Payments" button. It will be navigated to the PayPal.
+
      ![paypal](/readme_files/paypal.png)
+     
 12. The help page helps the user to understand the flow.
+
      ![help](/readme_files/help.png)
      
 
