@@ -107,3 +107,36 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * Reasearch: [wolfpool-report1-group-f.pdf](/reports/wolfpool-report1-group-f.pdf)
 * [Google Maps API](https://developers.google.com/maps/documentation/javascript/places-autocomplete)
 * [Authentication in Node.js using MongoDB](https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359)
+
+
+
+
+APPLICATION FLOW:
+
+1. Register as a new user by entering the following details.
+    - Name
+    - Email
+    - Password
+    - Confirm Password 
+2. The verification email will be sent to the email id entered during the registration. Verify the email and it will be navigated to the WolfPool application.
+3. Login to the application by Email and Password.
+4. The profile page can be updated by the clicking the "Profile" option on the main bar.
+5. After login, enter the follwing details to find the matching plan. If there is no matching plan then create a new plan.
+     - Date
+     - Name
+     - Source
+     - Destination
+     - Number of people
+6. After "Your trips" option is chosen, all the trip details will be displayed in the tabular format.
+7. The estimated fares for a particular trip can be obtained by chosing the option which is displayed beside each trip.
+8. The trip can be updated by choosing the option which is displayed beside each trip description. The following data should be entered to update the plan.
+     - Date
+     - Name
+     - Source
+     - Destination
+     - Number of people
+9. The trip can be deleted by choosing the option which is displayed beside each trip description.
+
+
+
+
