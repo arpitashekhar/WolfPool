@@ -7,7 +7,9 @@ var smtpTransport=nodemailer.createTransport({
 	auth:{
 		user: process.env.mailUser,
 		pass: process.env.mailPass
-	}
+  }
+  
+
 });
 var lyft = require("node-lyft");
 var apiRequest = require('request');
@@ -16,6 +18,8 @@ var checker = 0;
 exports.savePlan = function(request, response) {
   if (checker != 1) {
     var planModel = require('../models/plan');
+
+    
     
     // Create Participant
     var planData = new planModel({
