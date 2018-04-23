@@ -43,18 +43,11 @@ Command to install the dependencies [Works both on a terminal or cmd prompt]
 npm install --save
 ```
 
-STEP 6: With this the basic website is setup, ironically nothing will work because of the two APIs (Google Maps API and Mailjet API) and other code changes.
+STEP 6: With this the basic website is setup, ironically nothing will work because of the two APIs (Google Maps API and Nodemailer API) and other code changes.
 
 * **Google Maps API** - Please setup a Google Cloud account and get an API key following the neat documentation provided [here](https://developers.google.com/maps/documentation/javascript/get-api-key). Replace this key in the file views/partials/head.handlebars, line 17. This should enable Google Maps and its functionalities on localhost for development and debugging.
 
   **NOTE: Once you deploy the app on any online platform, please restrict the access to the Google services by limiting key access, more information [here](https://developers.google.com/maps/documentation/javascript/get-api-key#standard-auth)**
-
-* **Mailjet** - This is a third party service that allows us to send emails, which is used heavily in this application. Please create an account from this [site](https://www.mailjet.com). Once the account is verified you can get the keys from this [page](https://app.mailjet.com/transactional). Export or set the environment variables for the API. For windows follow (this)[https://superuser.com/questions/79612/setting-and-getting-windows-environment-variables-from-the-command-prompt], for linux/MacOS run the bellow commands before running STEP 5.
-
-```
-export MJ_PUBLIC_KEY="Your Public key"
-export MJ_PRIVATE_KEY="Your Private key"
-```
 
 * Open the file controllers/UserController.js and modify the hostname in line 31 that forms the hostname part of the verification link.
 * Open the file views/partials/head.handlebars and comment line 12 that redirects the traffic to HTTPS for the web application to work on localhost.
@@ -92,11 +85,11 @@ It has two steps, first is to get a certificate [instructions mentioned in previ
 
 ## Authors
 
-* **Chirag Jain** - *er.chiragjain92@gmail.com* - [github](http://github.com/CJ8664)
-* **Ankit Jain** - *ankit13jain@gmail.com* - [github](http://github.com/ankit13jain)
-* **Nirav Jain** - *niravr7@gmail.com* - [github](http://github.com/niravjain)
-* **Rishabh Jain** - *rishabh05apr@gmail.com* - [github](https://github.com/Rishabh05apr)
-* **Pratik Kumar Jain** - *kumathpratik@gmail.com* - [github](https://github.com/pratikkumar-jain)
+* **Bhavik Patel** - *bcpatel@ncsu.edu* 
+* **Arpita Shekhar** - *ashekha@ncsu.edu* 
+* **Aishwarya Sundararajan** - *asundar2@ncsu.edu* 
+* **Amulya Varote** - *avarote@ncsu.edu* 
+
 
 ## License
 
@@ -107,7 +100,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * Reasearch: [wolfpool-report1-group-f.pdf](/reports/wolfpool-report1-group-f.pdf)
 * [Google Maps API](https://developers.google.com/maps/documentation/javascript/places-autocomplete)
 * [Authentication in Node.js using MongoDB](https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359)
-
 
 
 
