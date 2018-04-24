@@ -57,7 +57,7 @@ exports.account=function(req,res){
     var req_data = qs.parse(body)
     console.log(req_data.oauth_token_secret)
 
-    const user={oauth_secret: req_data.oauth_token_secret}
+    const user={oauth_secret: req_data.oauth_token_secret,oauth_token: req_data.oauth_token}
   User.update({email: req.session.userEmail},user,(err,docs)=>{
       if(err)
        throw err;

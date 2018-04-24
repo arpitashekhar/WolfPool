@@ -80,6 +80,13 @@ exports.splitwise=function(req,res){
   var User = require('../models/user');
   var secret;
   console.log(req.query.oauth_token)
+  if(req.query.oauth_verifier){
+    const user={oauth_verifier: oauth_verifier}
+    User.update({email: req.session.userEmail},user,(e,d)=>{
+      if(e)
+       throw e 
+    })
+  }
   if(req.query.oauth_token){
     
     User.find({email: req.session.userEmail},(er,docs)=>{
