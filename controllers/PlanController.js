@@ -17,6 +17,7 @@ var checker = 0;
 
 exports.account=function(req,res){
   console.log("Hello")
+  var User = require('../models/user');
  // if(req.query.oauth_token && req.query.oauth_verifier)
   //{
   //console.log(userOAuthToken, userOAuthTokenSecret);
@@ -54,7 +55,13 @@ exports.account=function(req,res){
   request.post({url:url, oauth:oauth}, function (e, r, body) {
 
     var req_data = qs.parse(body)
-    console.log(req_data)
+    console.log(req_data.oauth_token_secret)
+
+    const user={oauth_secret: req_data.oauth_token_secret}
+  User.update({email: req.session.userEmail},user,(err,docs)=>{
+      if(err)
+       throw err;
+    })
     var uri = 'https://secure.splitwise.com/oauth/authorize'+ '?' + qs.stringify({oauth_token: req_data.oauth_token})
     res.redirect(uri)
   })  

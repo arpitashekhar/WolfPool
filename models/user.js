@@ -25,6 +25,7 @@ var userSchema = new mongoose.Schema({
   address: String,
   oauth_token: String,
   oauth_verifier: String,
+  oauth_secret: String,
   created_date: { type: Date, default: Date.now }
 });
 

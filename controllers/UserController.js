@@ -77,6 +77,69 @@ exports.createUser = function(req, res){
   }
 };
 exports.splitwise=function(req,res){
+  var User = require('../models/user');
+  var secret;
+  console.log(req.query.oauth_token)
+  if(req.query.oauth_token){
+    
+    User.find({email: req.session.userEmail},(er,docs)=>{
+     if(er)
+       throw er
+      secret=docs[0].oauth_secret 
+      console.log(docs[0].oauth_secret)
+    
+
+  var qs=require('querystring')
+      var oauth =
+      { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+      , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+      , token: req.query.oauth_token
+      , token_secret: docs[0].oauth_secret
+      , verifier: req.query.oauth_verifier
+      }
+    , url = 'https://secure.splitwise.com/oauth/access_token'; 
+  console.log("secret is"+secret)
+request.post({url:url, oauth:oauth}, function (e, r, body) {
+  // ready to make signed requests on behalf of the user
+  var perm_data = qs.parse(body)
+    , oauth =
+      { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+      , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+      , token: perm_data.oauth_token
+      , token_secret: perm_data.oauth_token_secret
+      }
+    , url="https://secure.splitwise.com/api/v3.0/get_current_user"
+ var flag=0
+  request.get({url:url, oauth:oauth, json:true}, function (e, r, user) {
+   // console.log(user)
+    var val=JSON.stringify(user)
+    var injson=JSON.parse(val)
+    userparameters=injson.user;
+    console.log(userparameters) 
+    flag=101
+   // res.end(userparameters,{userparameters: userparameters}) 
+  })
+  
+})
+    })
+var url = "http://secure.splitwise.com/api/v3.0/get_current_user?"+"oauth_token="+req.query.oauth_token+"&oauth_verifier="+req.query.oauth_verifier
+      console.log(url)
+
+      request({
+          url: url,
+          oauth_token: req.query.oauth_token,
+          oauth_verifier: req.query.oauth_verifier,
+
+         // html: true,
+         json: true
+      }, function (error, response, body) {
+      
+         // if (!error && response.statusCode === 200) {
+              
+              console.log("body"+body) // Print the json response
+          //}
+      })
+  }
   if(req.session && req.session.userId){
     var AuthApi = require('splitwise-node');
 var flag;
@@ -102,6 +165,7 @@ authApi.getOAuthRequestToken().then(function(oAuthToken, oAuthTokenSecret,url){
 
 exports.getProfile = function(req,res){
   var User = require('../models/user');
+  console.log(req.query.oauth_token)
   if (req.session && req.session.userId) {
     if(req.query.oauth_token && req.query.oauth_verifier)
     {

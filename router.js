@@ -17,9 +17,15 @@ module.exports = function(app) {
   // General routes
   app.get('/', function(req, res) {
     if (req.session && req.session.userId) {
-      //console.log(req.query.oauth_token)
-      //console.log(req.query.oauth_verifier)
-      
+      var secret
+      console.log(req.query.oauth_token)
+      console.log(req.query.oauth_verifier)
+     /* User.find({email: req.session.userEmail},(er,doc)=>{
+        if(er)
+         throw er
+         secret=doc[0].oauth_token_secret
+      })*/
+      //console.log(secret)
       res.render('home',{oauth_token: req.query.oauth_verifier,oauth_verifier: req.query.oauth_verifier});
     } else {
       res.render('login');
