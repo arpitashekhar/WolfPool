@@ -93,5 +93,6 @@ module.exports = function(app) {
   app.post('/loginUser', UserController.loginUser);
   app.get('/profile_page', UserController.getProfile);
   app.get('/splitwise',UserController.splitwise);
+  app.get('/splitwiseaccount',PlanController.account);
   
 };

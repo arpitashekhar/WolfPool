@@ -15,6 +15,101 @@ var lyft = require("node-lyft");
 var apiRequest = require('request');
 var checker = 0;
 
+exports.account=function(req,res){
+  console.log("Hello")
+ // if(req.query.oauth_token && req.query.oauth_verifier)
+  //{
+  //console.log(userOAuthToken, userOAuthTokenSecret);
+ //splitwiseApi = authApi.getSplitwiseApi(userOAuthToken, userOAuthTokenSecret);
+  //console.log(splitwiseApi.get_currencies)
+
+  /*const user={oauth_token: req.query.oauth_token,oauth_verifier: req.query.oauth_verifier}
+    User.update({email: req.session.userEmail},user,function(er,doc){
+      if(er)
+      {
+      throw er
+      }
+      console.log("token saved successfully") 
+
+    })*/
+    var request=require('request')
+    var qs = require('querystring'),
+    oauth ={ 
+   // callback: 'http://localhost:3000/splitwiseaccount',
+   // callback: 'http://localhost:3000',
+    consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf',
+    consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+    },
+     url = 'https://secure.splitwise.com/oauth/request_token';
+
+ /* var oauth =
+    { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+    , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+    , token: userOAuthToken
+    , token_secret: userOAuthTokenSecret
+    , verifier: req.query.oauth_verifier
+    }
+  , url = 'https://secure.splitwise.com/oauth/access_token';
+ */
+  request.post({url:url, oauth:oauth}, function (e, r, body) {
+
+    var req_data = qs.parse(body)
+    console.log(req_data)
+    var uri = 'https://secure.splitwise.com/oauth/authorize'+ '?' + qs.stringify({oauth_token: req_data.oauth_token})
+    res.redirect(uri)
+  })  
+    //r.redirect(uri)
+    /*http.get(uri,(req,res)=>{
+      console.log("I am authorized")
+    })*/  
+   /*   var auth_data=qs.parse(body)
+      var oauth =
+      { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+      , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+      , token: auth_data.oauth_token
+      , token_secret: auth_data.oauth_token_secret
+      , verifier: auth_data.oauth_verifier
+      }
+    , url = 'https://secure.splitwise.com/oauth/access_token'; 
+  
+request.post({url:url, oauth:oauth}, function (e, r, body) {
+  // ready to make signed requests on behalf of the user
+  var perm_data = qs.parse(body)
+    , oauth =
+      { consumer_key: 'reCgWzYYm9A7MaSVZOwE4woss5quFct6PxqthGpf'
+      , consumer_secret: 'j8e2jV1ZhvT3Q4W366nL7rWOmirwzwH31aDSgUXB'
+      , token: perm_data.oauth_token
+      , token_secret: perm_data.oauth_token_secret
+      }
+    , url = "https://secure.splitwise.com/api/v3.0/get_current_user?"+"oauth_token="+perm_data.oauth_token+"&oauth_verifier="+perm_data.oauth_verifier;
+
+  request.get({url:url, oauth:oauth, json:true}, function (e, r, user) {
+    console.log(user)
+    var val=JSON.stringify(user)
+    var injson=JSON.parse(val)
+    userparameters=injson.user;
+    console.log(userparameters) 
+  })
+})
+  })
+  /*var url = "http://secure.splitwise.com/api/v3.0/get_current_user?"+"oauth_token="+req.query.oauth_token+"&oauth_verifier="+req.query.oauth_verifier
+    request({
+        url: url,
+        oauth_token: req.query.oauth_token,
+        oauth_verifier: req.query.oauth_verifier,
+
+       // html: true,
+       json: true
+    }, function (error, response, body) {
+    
+       console.log(body) // Print the json response
+        
+    })
+
+  })
+  }*/
+//}
+}
 exports.savePlan = function(request, response) {
   if (checker != 1) {
     var planModel = require('../models/plan');
