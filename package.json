@@ -38,6 +38,7 @@
     "oauth": "^0.9.15",
     "popper.js": "^1.12.9",
     "promise": "^8.0.1",
+    "request": "^2.85.0",
     "splitwise": "^1.0.0",
     "splitwise-node": "^0.3.3",
     "validator": "^9.4.0"
